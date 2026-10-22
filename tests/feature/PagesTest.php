@@ -17,6 +17,7 @@ final class PagesTest extends CIUnitTestCase
         $result->assertOK();
         $result->assertSee('MyFushi');
         $result->assertSee('lang="ja"');
+        $result->assertSee('<meta name="google-adsense-account" content="ca-pub-3320427785368951">');
         $result->assertSee('src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951"');
         $result->assertSee('crossorigin="anonymous"');
         $result->assertDontSee('noindex');
