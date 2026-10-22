@@ -2,6 +2,7 @@
 
 <?= $this->section('content') ?>
 <h1>吉日日暦</h1>
+<?= $this->include('partials/ymyl_short') ?>
 <p>用途と年月から、よく使われる暦の見方で候補日を絞り込む予定です。仕事の都合との両立が先です。いまは入力の受け付けだけです。</p>
 
 <?php
@@ -11,12 +12,12 @@ $events = [
     'keiyaku'  => '契約・鍵渡し',
 ];
 ?>
-<form method="get" action="<?= site_url('tools/kichijitsu') ?>">
+<form method="post" action="<?= site_url('tools/kichijitsu') ?>">
     <fieldset>
         <legend>用途</legend>
         <?php foreach ($events as $value => $label): ?>
             <label>
-                <input type="radio" name="event" value="<?= esc($value) ?>" <?= $values['event'] === $value ? 'checked' : '' ?>>
+                <input type="radio" name="event" value="<?= esc($value) ?>" <?= $values['event'] === $value ? 'checked' : '' ?> required>
                 <?= esc($label) ?>
             </label>
         <?php endforeach; ?>
@@ -48,6 +49,7 @@ $events = [
 <?php if ($accepted): ?>
     <section class="result" aria-live="polite">
         <h2>結果（プレースホルダ）</h2>
+        <?= $this->include('partials/result_status') ?>
         <p>条件は受け付けました（<?= esc($events[$values['event']] ?? '') ?>、<?= esc($values['year']) ?>年<?= esc($values['month']) ?>月）。</p>
         <p>吉日の一覧と注意事項の計算はまだ実装していません。日取りの最終決定には使わないでください。</p>
     </section>

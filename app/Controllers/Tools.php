@@ -74,12 +74,18 @@ class Tools extends BaseController
     }
 
     /**
-     * @param array<string, string>              $rules
+     * Forms POST back to the same path. A GET with submit=1 still works so the
+     * original query-string checks keep passing. Either way the page only echoes
+     * input. See docs/fe-api-contract-stub.md.
+     *
+     * @param array<string, string>                $rules
      * @param array<string, array<string, string>> $messages
      */
     private function render(string $view, string $title, array $rules, array $messages): string
     {
-        $submitted = $this->request->getGet('submit') !== null;
+        $input     = $this->submittedInput();
+        $submit    = $input['submit'] ?? null;
+        $submitted = is_string($submit) && $submit !== '';
         $errors    = [];
         $accepted  = false;
 
@@ -98,7 +104,8 @@ class Tools extends BaseController
         $values = [];
 
         foreach (array_keys($rules) as $field) {
-            $values[$field] = (string) $this->request->getGet($field);
+            $raw            = $input[$field] ?? '';
+            $values[$field] = is_string($raw) ? $raw : '';
         }
 
         return view($view, [
@@ -108,5 +115,15 @@ class Tools extends BaseController
             'accepted'  => $accepted,
             'submitted' => $submitted,
         ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function submittedInput(): array
+    {
+        $data = $this->request->is('post') ? $this->request->getPost() : $this->request->getGet();
+
+        return is_array($data) ? $data : [];
     }
 }

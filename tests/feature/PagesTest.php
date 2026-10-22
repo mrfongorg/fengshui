@@ -93,4 +93,113 @@ final class PagesTest extends CIUnitTestCase
         $result->assertSee('ページが見つかりません');
         $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
     }
+
+    public function testHonmeiPostEchoesInputWithoutCalculation(): void
+    {
+        $result = $this->post('/tools/honmei-kichihoi', [
+            'birth_year' => '1990',
+            'submit'     => '1',
+        ]);
+
+        $result->assertOK();
+        $result->assertSee('結果（プレースホルダ）');
+        $result->assertSee('結果＝参考・計算未實作');
+        $result->assertSee('1990');
+        $result->assertSee('method="post"');
+    }
+
+    public function testHonmeiPostRejectsBadYear(): void
+    {
+        $result = $this->post('/tools/honmei-kichihoi', [
+            'birth_year' => 'abc',
+            'submit'     => '1',
+        ]);
+
+        $result->assertOK();
+        $result->assertSee('西暦の数字');
+        $result->assertDontSee('結果（プレースホルダ）');
+        $result->assertDontSee('結果＝参考・計算未實作');
+    }
+
+    public function testKichijitsuPostEchoesFilter(): void
+    {
+        $result = $this->post('/tools/kichijitsu', [
+            'event'  => 'nyukyo',
+            'year'   => '2026',
+            'month'  => '11',
+            'submit' => '1',
+        ]);
+
+        $result->assertOK();
+        $result->assertSee('結果＝参考・計算未實作');
+        $result->assertSee('入居・入宅');
+        $result->assertSee('2026');
+    }
+
+    public function testKimonPostEchoesAnswers(): void
+    {
+        $result = $this->post('/tools/kimon-qa', [
+            'entrance'  => 'yes',
+            'water'     => 'unknown',
+            'furniture' => 'no',
+            'submit'    => '1',
+        ]);
+
+        $result->assertOK();
+        $result->assertSee('結果＝参考・計算未實作');
+        $result->assertSee('吉凶の答えとして読まない');
+        $result->assertSee('わからない');
+    }
+
+    public function testDisclaimerAndPrivacy(): void
+    {
+        $disclaimer = $this->get('/disclaimer');
+        $disclaimer->assertOK();
+        $disclaimer->assertSee('免責事項');
+        $disclaimer->assertSee('MyFushi');
+        $disclaimer->assertSee('lang="ja"');
+
+        $privacy = $this->get('/privacy/');
+        $privacy->assertOK();
+        $privacy->assertSee('プライバシー');
+        $privacy->assertSee('いまのサイトではデータベースへ保存しません');
+    }
+
+    public function testClusterIndexesAndSamples(): void
+    {
+        $pages = [
+            '/genkan'         => '玄関セルフチェックリスト',
+            '/genkan/'        => '準備中',
+            '/genkan/a7'      => 'サンプル下書き',
+            '/mizumawari'     => 'トイレの位置と風水でよく聞く注意点',
+            '/mizumawari/b1/' => '鬼門問答',
+            '/hikkoshi/'      => '引越しの吉日の見方',
+            '/hikkoshi/c1'    => '吉日は決定ではない',
+        ];
+
+        foreach ($pages as $path => $needle) {
+            $result = $this->get($path);
+            $result->assertOK();
+            $result->assertSee('MyFushi');
+            $result->assertSee($needle);
+            $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        }
+    }
+
+    public function testUnpublishedOutlineIsJapanese404(): void
+    {
+        $result = $this->get('/genkan/a1');
+
+        $result->assertStatus(404);
+        $result->assertSee('ページが見つかりません');
+    }
+
+    public function testPagesDoNotUseRetiredNames(): void
+    {
+        foreach (['/', '/disclaimer', '/privacy', '/genkan/a7', '/mizumawari/b1', '/hikkoshi/c1', '/tools/honmei-kichihoi'] as $path) {
+            $body = (string) $this->get($path)->response()->getBody();
+            $this->assertStringNotContainsString('MINGFONG', $body);
+            $this->assertStringNotContainsString('風水日站', $body);
+        }
+    }
 }
