@@ -7,8 +7,8 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
 /**
- * Staging stub: ask crawlers not to index any response.
- * Remove this filter before a public launch.
+ * Sets X-Robots-Tag: noindex, nofollow when this filter is applied to a route.
+ * The alias is registered and is not in the global filter list, so public pages stay indexable.
  */
 class NoIndex implements FilterInterface
 {

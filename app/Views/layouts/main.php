@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
     <title><?= esc($title) ?> | MyFushi</title>
     <link rel="stylesheet" href="<?= base_url('css/site.css') ?>">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951" crossorigin="anonymous"></script>
 </head>
 <body>
     <a class="skip" href="#content">本文へ</a>
