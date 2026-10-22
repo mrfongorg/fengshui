@@ -1,0 +1,64 @@
+#--------------------------------------------------------------------
+# MyFushi — CodeIgniter environment template
+#
+# Copy to .env for local use:
+#   cp env.example .env
+#
+# Do not commit .env. Do not put real passwords, API tokens, or
+# encryption keys in this file.
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+# ENVIRONMENT
+#--------------------------------------------------------------------
+# Local: development. On a server use production (debug off).
+
+CI_ENVIRONMENT = development
+
+#--------------------------------------------------------------------
+# APP
+#--------------------------------------------------------------------
+
+app.baseURL = 'http://localhost:8080/'
+# Staging example (set on the server, not in git):
+# app.baseURL = 'https://staging.myfushi.com/'
+# app.forceGlobalSecureRequests = false
+
+# Default locale is Japanese. App.php also defaults to ja.
+app.defaultLocale = ja
+app.appTimezone = Asia/Tokyo
+
+#--------------------------------------------------------------------
+# DATABASE
+#--------------------------------------------------------------------
+# Leave commented until a database is provisioned. No database is
+# required for the current page stubs.
+
+# database.default.hostname = localhost
+# database.default.database = myfushi
+# database.default.username =
+# database.default.password =
+# database.default.DBDriver = MySQLi
+# database.default.DBPrefix =
+# database.default.port = 3306
+
+#--------------------------------------------------------------------
+# ENCRYPTION
+#--------------------------------------------------------------------
+# Generate a key on the server. Do not commit a real key.
+# php spark key:generate
+
+# encryption.key =
+
+#--------------------------------------------------------------------
+# SESSION
+#--------------------------------------------------------------------
+
+# session.driver = 'CodeIgniter\Session\Handlers\FileHandler'
+# session.savePath = null
+
+#--------------------------------------------------------------------
+# LOGGER
+#--------------------------------------------------------------------
+
+# logger.threshold = 4
