@@ -13,6 +13,19 @@
         </div>
     </section>
 
+    <?php
+    /*
+     * One manual AdSense reserve, directly under the hero and before the tool cards.
+     * Publisher ca-pub-3320427785368951 is already listed in ads.txt.
+     * data-ad-slot stays empty until AdSense approval. Do not request a creative before then.
+     * After approval: set data-ad-slot, drop aria-hidden, and enable this loader only:
+     * <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951" crossorigin="anonymous"></script>
+     * <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3320427785368951" data-ad-slot="SLOT_ID_AFTER_APPROVAL" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+     * <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+     */
+    ?>
+    <aside class="ad-reserve" data-ad-client="ca-pub-3320427785368951" data-ad-slot="" data-ad-format="horizontal" data-full-width-responsive="true" aria-hidden="true"></aside>
+
     <div class="rule" aria-hidden="true">
         <span></span>
         <svg viewBox="0 0 24 24" focusable="false">
