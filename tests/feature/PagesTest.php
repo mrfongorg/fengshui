@@ -16,6 +16,13 @@ final class PagesTest extends CIUnitTestCase
 
         $result->assertOK();
         $result->assertSee('MyFushi');
+        $result->assertSee('玄關の第一印象');
+        $result->assertSee('ツールを試す');
+        $result->assertSee('吉方位');
+        $result->assertSee('吉日カレンダー');
+        $result->assertSee('tools/honmei-kichihoi');
+        $result->assertSee('tools/kichijitsu');
+        $result->assertDontSee('住まいの整え方を、参考情報として届けるサイトです');
         $result->assertSee('lang="ja"');
         $result->assertSee('noindex');
         $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -198,8 +205,9 @@ final class PagesTest extends CIUnitTestCase
     {
         foreach (['/', '/disclaimer', '/privacy', '/genkan/a7', '/mizumawari/b1', '/hikkoshi/c1', '/tools/honmei-kichihoi'] as $path) {
             $body = (string) $this->get($path)->response()->getBody();
-            $this->assertStringNotContainsString('MINGFONG', $body);
-            $this->assertStringNotContainsString('風水日站', $body);
+            foreach (['MINGFONG', '鳴鳳', '鸣凤', '阴盘奇门遁甲', '陰盤奇門遁甲', '風水日站'] as $retired) {
+                $this->assertStringNotContainsString($retired, $body, $path . ' contains ' . $retired);
+            }
         }
     }
 }

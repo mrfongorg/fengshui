@@ -1,43 +1,56 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<h1>MyFushi</h1>
-<p class="lead">住まいの整え方を、参考情報として届けるサイトです。玄関・水回り・引越の三つのテーマと、三つのツールを準備しています。</p>
+<div class="home">
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-panel">
+            <h1 id="hero-title">玄關の第一印象</h1>
+            <p class="hero-lead">快適な気の流れで、<br>あなたの生活をサポート。</p>
+            <a class="button-link" href="#tools">ツールを試す</a>
+        </div>
+        <div class="compass">
+            <?= $this->include('partials/compass') ?>
+        </div>
+    </section>
 
-<section>
-    <h2>テーマ</h2>
-    <ul class="tool-list">
-        <li>
-            <a href="<?= site_url('genkan') ?>">玄関</a>
-            <span>入口の動線、明るさ、置き方。サンプルはセルフチェックです。</span>
-        </li>
-        <li>
-            <a href="<?= site_url('mizumawari') ?>">水回り</a>
-            <span>トイレ、浴室、キッチン、洗面所。サンプルはトイレの位置の注意点です。</span>
-        </li>
-        <li>
-            <a href="<?= site_url('hikkoshi') ?>">引越</a>
-            <span>日取り、入居、新居で最初にすること。サンプルは吉日の見方です。</span>
-        </li>
-    </ul>
-    <p>各テーマに目次とサンプル記事を1本置いています。残りの記事と、ツールの計算はこれからです。</p>
-</section>
+    <div class="rule" aria-hidden="true">
+        <span></span>
+        <svg viewBox="0 0 24 24" focusable="false">
+            <circle cx="12" cy="12" r="4.25" fill="none" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        <span></span>
+    </div>
 
-<section>
-    <h2>ツール</h2>
-    <ul class="tool-list">
-        <li>
-            <a href="<?= site_url('tools/honmei-kichihoi') ?>">本命星／今年吉方位</a>
-            <span>生まれ年から、今年の方位の見方へ（準備中）</span>
-        </li>
-        <li>
-            <a href="<?= site_url('tools/kichijitsu') ?>">吉日日暦</a>
-            <span>引越し・入居・契約の日取りを絞り込む画面（準備中）</span>
-        </li>
-        <li>
-            <a href="<?= site_url('tools/kimon-qa') ?>">鬼門問答</a>
-            <span>鬼門側の置き方を、はい／いいえで確認する画面（準備中）</span>
-        </li>
-    </ul>
-</section>
+    <section class="tool-board" id="tools" aria-label="ツール">
+        <a class="tool-card" href="<?= site_url('tools/honmei-kichihoi') ?>">
+            <?= $this->include('partials/seal') ?>
+            <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle cx="32" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+            <span class="tool-card-title">本命星</span>
+            <span class="tool-card-note">生まれ年からの見方</span>
+        </a>
+        <a class="tool-card" href="<?= site_url('tools/honmei-kichihoi') ?>">
+            <?= $this->include('partials/seal') ?>
+            <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <circle cx="32" cy="32" r="15.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                <path fill="currentColor" d="M32 16.5a15.5 15.5 0 0 1 0 31 7.75 7.75 0 0 1 0-15.5 7.75 7.75 0 0 0 0-15.5z"/>
+                <circle cx="32" cy="24.25" r="2.15" fill="#0B1220"/>
+                <circle cx="32" cy="39.75" r="2.15" fill="currentColor"/>
+            </svg>
+            <span class="tool-card-title">吉方位</span>
+            <span class="tool-card-note">今年の方位</span>
+        </a>
+        <a class="tool-card" href="<?= site_url('tools/kichijitsu') ?>">
+            <?= $this->include('partials/seal') ?>
+            <svg class="mark" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <path d="M14 44c6-8 12-8 18 0s12 8 18 0" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M10 33c8-10 15-10 22 0s14 10 22 0" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                <path d="M6 22c10-12 19-12 26 0s16 12 26 0" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            <span class="tool-card-title">吉日カレンダー</span>
+            <span class="tool-card-note">日取りの参考</span>
+        </a>
+    </section>
+</div>
 <?= $this->endSection() ?>
