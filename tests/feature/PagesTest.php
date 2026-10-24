@@ -28,6 +28,42 @@ final class PagesTest extends CIUnitTestCase
         $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
     }
 
+    public function testHomeReservesOneAdSlotUnderHero(): void
+    {
+        $result = $this->get('/');
+
+        $result->assertOK();
+        $body = (string) $result->response()->getBody();
+
+        $this->assertSame(1, substr_count($body, 'class="ad-reserve"'));
+        $this->assertSame(1, substr_count($body, 'data-ad-client="ca-pub-3320427785368951"'));
+        $this->assertStringContainsString('data-ad-slot=""', $body);
+        $this->assertStringContainsString('data-ad-format="horizontal"', $body);
+        $this->assertStringNotContainsString('adsbygoogle', $body);
+        $this->assertStringNotContainsString('pagead2.googlesyndication.com', $body);
+        $this->assertStringNotContainsString('鳴鳳', $body);
+        $this->assertStringNotContainsString('MINGFONG', $body);
+
+        $hero = strpos($body, 'id="hero-title"');
+        $slot = strpos($body, 'class="ad-reserve"');
+        $tools = strpos($body, 'id="tools"');
+        $this->assertNotFalse($hero);
+        $this->assertNotFalse($slot);
+        $this->assertNotFalse($tools);
+        $this->assertGreaterThan($hero, $slot);
+        $this->assertLessThan($tools, $slot);
+
+        $tool = (string) $this->get('/tools/kichijitsu')->response()->getBody();
+        $this->assertStringNotContainsString('ad-reserve', $tool);
+
+        $css = file_get_contents(PUBLICPATH . 'css/site.css');
+        $this->assertMatchesRegularExpression('/\.ad-reserve\s*\{[^}]*min-height:\s*90px/s', $css);
+        $this->assertMatchesRegularExpression('/\.ad-reserve\s*\{[^}]*background:\s*var\(--bg-0\)/s', $css);
+        $this->assertMatchesRegularExpression('/\.ad-reserve\s*\{[^}]*border:\s*1px solid var\(--gold\)/s', $css);
+        $this->assertStringContainsString('.ad-reserve[data-ad-slot=""]::before', $css);
+        $this->assertSame(1, preg_match_all('/min-height:\s*90px/', $css));
+    }
+
     public function testHonmeiStub(): void
     {
         $result = $this->get('/tools/honmei-kichihoi');
