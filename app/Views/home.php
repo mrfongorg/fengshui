@@ -15,16 +15,21 @@
 
     <?php
     /*
-     * One manual AdSense reserve, directly under the hero and before the tool cards.
-     * Publisher ca-pub-3320427785368951 is already listed in ads.txt.
-     * data-ad-slot stays empty until AdSense approval. Do not request a creative before then.
-     * After approval: set data-ad-slot, drop aria-hidden, and enable this loader only:
-     * <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951" crossorigin="anonymous"></script>
-     * <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3320427785368951" data-ad-slot="SLOT_ID_AFTER_APPROVAL" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
-     * <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+     * MyFushi hero horizontal. Live Display unit under the hero and before the tool cards.
+     * adsbygoogle.js for ca-pub-3320427785368951 loads once from the layout head.
      */
     ?>
-    <aside class="ad-reserve" data-ad-client="ca-pub-3320427785368951" data-ad-slot="" data-ad-format="horizontal" data-full-width-responsive="true" aria-hidden="true"></aside>
+    <aside class="ad-reserve">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3320427785368951"
+             data-ad-slot="1326465975"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </aside>
 
     <div class="rule" aria-hidden="true">
         <span></span>
