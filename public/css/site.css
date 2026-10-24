@@ -200,7 +200,7 @@ h2 { font-size: 1.15rem; letter-spacing: 0.05em; margin: 1.5rem 0 0.5rem; }
 
 .luopan { display: block; width: 100%; height: auto; }
 
-/* Empty manual AdSense frame. min-height matches a horizontal banner so filling the slot later does not shift the tool cards. */
+/* Live Display unit under the hero. min-height holds the banner so the tool cards do not shift before the creative loads. */
 .ad-reserve {
     position: relative;
     display: block;
@@ -213,12 +213,10 @@ h2 { font-size: 1.15rem; letter-spacing: 0.05em; margin: 1.5rem 0 0.5rem; }
     border: 1px solid var(--gold);
 }
 
-.ad-reserve[data-ad-slot=""]::before {
-    content: "";
-    position: absolute;
-    inset: 6px;
-    border: 1px solid rgba(201, 169, 106, 0.36);
-    pointer-events: none;
+.ad-reserve .adsbygoogle {
+    display: block;
+    width: 100%;
+    min-height: inherit;
 }
 
 .rule {

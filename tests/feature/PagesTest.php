@@ -28,7 +28,7 @@ final class PagesTest extends CIUnitTestCase
         $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
     }
 
-    public function testHomeReservesOneAdSlotUnderHero(): void
+    public function testHomeShowsLiveAdUnitUnderHero(): void
     {
         $result = $this->get('/');
 
@@ -36,13 +36,23 @@ final class PagesTest extends CIUnitTestCase
         $body = (string) $result->response()->getBody();
 
         $this->assertSame(1, substr_count($body, 'class="ad-reserve"'));
+        $this->assertSame(1, substr_count($body, 'class="adsbygoogle"'));
         $this->assertSame(1, substr_count($body, 'data-ad-client="ca-pub-3320427785368951"'));
-        $this->assertStringContainsString('data-ad-slot=""', $body);
-        $this->assertStringContainsString('data-ad-format="horizontal"', $body);
-        $this->assertStringNotContainsString('adsbygoogle', $body);
-        $this->assertStringNotContainsString('pagead2.googlesyndication.com', $body);
+        $this->assertSame(1, substr_count($body, 'data-ad-slot="1326465975"'));
+        $this->assertStringContainsString('data-ad-format="auto"', $body);
+        $this->assertStringContainsString('data-full-width-responsive="true"', $body);
+        $this->assertStringContainsString('(adsbygoogle = window.adsbygoogle || []).push({});', $body);
+        $this->assertSame(1, substr_count($body, 'adsbygoogle.js?client=ca-pub-3320427785368951'));
+        $this->assertStringNotContainsString('data-ad-slot=""', $body);
+        $this->assertStringNotContainsString('SLOT_ID_AFTER_APPROVAL', $body);
+        $this->assertStringNotContainsString('stays empty until', $body);
         $this->assertStringNotContainsString('鳴鳳', $body);
         $this->assertStringNotContainsString('MINGFONG', $body);
+
+        $this->assertSame(1, preg_match('/<aside class="ad-reserve">(.*?)<\/aside>/s', $body, $aside));
+        $this->assertStringNotContainsString('aria-hidden', $aside[1]);
+        $this->assertStringContainsString('data-ad-slot="1326465975"', $aside[1]);
+        $this->assertStringContainsString('(adsbygoogle = window.adsbygoogle || []).push({});', $aside[1]);
 
         $hero = strpos($body, 'id="hero-title"');
         $slot = strpos($body, 'class="ad-reserve"');
@@ -55,12 +65,15 @@ final class PagesTest extends CIUnitTestCase
 
         $tool = (string) $this->get('/tools/kichijitsu')->response()->getBody();
         $this->assertStringNotContainsString('ad-reserve', $tool);
+        $this->assertStringNotContainsString('1326465975', $tool);
+        $this->assertStringNotContainsString('(adsbygoogle = window.adsbygoogle || []).push({});', $tool);
 
         $css = file_get_contents(PUBLICPATH . 'css/site.css');
         $this->assertMatchesRegularExpression('/\.ad-reserve\s*\{[^}]*min-height:\s*90px/s', $css);
         $this->assertMatchesRegularExpression('/\.ad-reserve\s*\{[^}]*background:\s*var\(--bg-0\)/s', $css);
         $this->assertMatchesRegularExpression('/\.ad-reserve\s*\{[^}]*border:\s*1px solid var\(--gold\)/s', $css);
-        $this->assertStringContainsString('.ad-reserve[data-ad-slot=""]::before', $css);
+        $this->assertMatchesRegularExpression('/\.ad-reserve\s+\.adsbygoogle\s*\{[^}]*min-height:\s*inherit/s', $css);
+        $this->assertStringNotContainsString('.ad-reserve[data-ad-slot=""]::before', $css);
         $this->assertSame(1, preg_match_all('/min-height:\s*90px/', $css));
     }
 

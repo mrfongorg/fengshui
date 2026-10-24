@@ -7,6 +7,7 @@
     <title><?= esc($title) ?> | MyFushi</title>
     <link rel="preload" href="<?= base_url('fonts/shippori-mincho-500-japanese.woff2') ?>" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="<?= base_url('css/site.css') ?>">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="sky" aria-hidden="true"></div>
