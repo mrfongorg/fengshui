@@ -20,7 +20,7 @@ Brand on any response is MyFushi only.
 | GET | `/tools/kimon-qa` | Empty form |
 | POST | same three tool paths | Validated echo, or field errors |
 
-Content-Type is `text/html`. Every response sends `X-Robots-Tag: noindex, nofollow`.
+Content-Type is `text/html`. Normal responses are indexable and do not send `X-Robots-Tag`.
 
 A GET with `?submit=1` and the same field names still runs the same controller. The forms themselves use POST.
 
@@ -154,5 +154,5 @@ T3:
 
 - Keep the public disclaimer: reference and entertainment, not a professional appraisal, and not a guarantee.
 - Do not add image or floor-plan upload in this contract.
-- Leave staging responses `noindex`.
+- Keep public HTML responses indexable. Leave the `noindex` filter off the global after list.
 - When the HTML forms start storing anything, enable the CSRF filter on POST and keep the field names above so the current forms still match.

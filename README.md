@@ -51,7 +51,7 @@ For staging (`https://staging.myfushi.com`), when this project is deployed later
 
 This branch does not deploy. Production (`https://myfushi.com`) is out of scope.
 
-Stub responses send `X-Robots-Tag: noindex, nofollow`, a matching robots meta tag, and `public/robots.txt` disallows all crawlers. Remove those three before a public launch.
+Search indexing is open. `public/robots.txt` allows crawlers. Normal pages omit a robots meta tag and do not send `X-Robots-Tag`. `public/ads.txt` publishes the AdSense line, and the site layout loads AdSense Auto ads for myfushi.com. Stock error templates may still send `noindex`.
 
 ## Staging copy (do not run as a production deploy)
 
@@ -60,7 +60,7 @@ When someone later copies this tree to the staging host, the document root stays
 1. `composer install --no-dev --optimize-autoloader`
 2. `cp env.example .env`, then set `CI_ENVIRONMENT = production` and `app.baseURL = 'https://staging.myfushi.com/'` (trailing slash).
 3. Make `writable/` writable by the PHP user.
-4. Confirm `public/robots.txt` still disallows all crawlers.
+4. Confirm `public/robots.txt` allows crawlers and `public/ads.txt` is in `public/`.
 
 ```bash
 rsync -av --exclude .git --exclude .env --exclude tests --exclude build \

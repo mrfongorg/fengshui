@@ -24,8 +24,29 @@ final class PagesTest extends CIUnitTestCase
         $result->assertSee('tools/kichijitsu');
         $result->assertDontSee('住まいの整え方を、参考情報として届けるサイトです');
         $result->assertSee('lang="ja"');
-        $result->assertSee('noindex');
-        $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        $result->assertSee('<meta name="google-adsense-account" content="ca-pub-3320427785368951">');
+        $result->assertSee('src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951"');
+        $result->assertSee('crossorigin="anonymous"');
+        $result->assertDontSee('noindex');
+        $result->assertHeaderMissing('X-Robots-Tag');
+
+        $body = (string) $result->response()->getBody();
+        $css  = strpos($body, 'css/site.css');
+        $ads  = strpos($body, 'pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951');
+        $this->assertNotFalse($css);
+        $this->assertNotFalse($ads);
+        $this->assertGreaterThan($css, $ads);
+    }
+
+    public function testCrawlFilesAllowIndexing(): void
+    {
+        $ads = file_get_contents(PUBLICPATH . 'ads.txt');
+        $this->assertSame("google.com, pub-3320427785368951, DIRECT, f08c47fec0942fa0\n", $ads);
+
+        $robots = file_get_contents(PUBLICPATH . 'robots.txt');
+        $this->assertStringContainsString("User-agent: *\n", $robots);
+        $this->assertStringContainsString('Allow: /', $robots);
+        $this->assertStringNotContainsString('Disallow:', $robots);
     }
 
     public function testHomeReservesOneAdSlotUnderHero(): void
@@ -71,7 +92,8 @@ final class PagesTest extends CIUnitTestCase
         $result->assertOK();
         $result->assertSee('本命星／今年吉方位');
         $result->assertSee('参考');
-        $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        $result->assertDontSee('noindex');
+        $result->assertHeaderMissing('X-Robots-Tag');
     }
 
     public function testHonmeiAcceptsYearWithoutCalculating(): void
@@ -134,7 +156,7 @@ final class PagesTest extends CIUnitTestCase
 
         $result->assertStatus(404);
         $result->assertSee('ページが見つかりません');
-        $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        $result->assertHeaderMissing('X-Robots-Tag');
     }
 
     public function testHonmeiPostEchoesInputWithoutCalculation(): void
@@ -225,7 +247,8 @@ final class PagesTest extends CIUnitTestCase
             $result->assertOK();
             $result->assertSee('MyFushi');
             $result->assertSee($needle);
-            $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+            $result->assertDontSee('noindex');
+            $result->assertHeaderMissing('X-Robots-Tag');
         }
     }
 

@@ -78,7 +78,7 @@ class Filters extends BaseFilters
             // 'invalidchars',
         ],
         'after' => [
-            'noindex',
+            // 'noindex' stays registered above and is not global, so public pages are indexable.
             // 'honeypot',
             // 'secureheaders',
         ],

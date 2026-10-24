@@ -3,10 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
     <title><?= esc($title) ?> | MyFushi</title>
     <link rel="preload" href="<?= base_url('fonts/shippori-mincho-500-japanese.woff2') ?>" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="<?= base_url('css/site.css') ?>">
+    <meta name="google-adsense-account" content="ca-pub-3320427785368951">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="sky" aria-hidden="true"></div>
