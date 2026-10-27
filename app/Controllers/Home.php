@@ -6,8 +6,6 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('home', [
-            'title' => 'ホーム',
-        ]);
+        return $this->renderPage('home', '/');
     }
 }

@@ -2,18 +2,29 @@
 
 Japanese-first reference site for everyday home feng shui ([myfushi.com](https://myfushi.com)). The app is [CodeIgniter 4](https://codeigniter.com/) (PHP 8.2+, staging runs PHP 8.3). The web root is `public/`.
 
-This repository is a skeleton: a home page and three tool stubs. Article bodies are not written yet. Tool screens accept input and stop there. They do not calculate a result. Every page says the content is reference only.
+This repository is a skeleton: a home page, three tool stubs, disclaimer and privacy pages, and three content clusters with one sample article each (A7, B1, C1). Tool screens accept a form and echo it. They do not calculate a result. Every page says the content is reference only.
+
+Branch `fe/myfushi-ci4-skeleton-20261022` is the frontend pass on `be/myfushi-ci4-skeleton-20261022`. This branch does not deploy. Production (`https://myfushi.com`) is out of scope. Staging, when someone deploys later, is [staging.myfushi.com](https://staging.myfushi.com).
 
 ## Routes
 
 | Path | Page |
 | --- | --- |
 | `/` | Home |
-| `/tools/honmei-kichihoi` | 本命星／今年吉方位 |
-| `/tools/kichijitsu` | 吉日日暦 |
-| `/tools/kimon-qa` | 鬼門問答 |
+| `/sitemap.xml` | Sitemap of the public pages |
+| `/disclaimer` | 免責事項 |
+| `/privacy` | プライバシー |
+| `/tools/honmei-kichihoi` | 本命星／今年吉方位（GET form, POST echo） |
+| `/tools/kichijitsu` | 吉日日暦（GET form, POST echo） |
+| `/tools/kimon-qa` | 鬼門問答（GET form, POST echo） |
+| `/genkan/` | 玄関 index |
+| `/genkan/a7` | A7 玄関セルフチェックリスト |
+| `/mizumawari/` | 水回り index |
+| `/mizumawari/b1` | B1 トイレの位置と風水でよく聞く注意点 |
+| `/hikkoshi/` | 引越 index |
+| `/hikkoshi/c1` | C1 引越しの吉日の見方 |
 
-Default locale is `ja`. HTML is `lang="ja"`.
+The same pages answer without the trailing slash. Default locale is `ja`. HTML is `lang="ja"`.
 
 ## Run locally
 
@@ -41,8 +52,26 @@ For staging (`https://staging.myfushi.com`), when this project is deployed later
 
 This branch does not deploy. Production (`https://myfushi.com`) is out of scope.
 
-Stub responses send `X-Robots-Tag: noindex, nofollow`, a matching robots meta tag, and `public/robots.txt` disallows all crawlers. Remove those three before a public launch.
+Public pages are indexable. `public/robots.txt` allows crawlers and names `https://myfushi.com/sitemap.xml`. `app/Views/layouts/main.php` prints each page's title, meta description, canonical URL, and basic Open Graph tags from `App\Libraries\PublicPages`. Unknown URLs return 404 with a noindex robots meta tag. There is no JSON-LD yet.
+
+## Staging copy (do not run as a production deploy)
+
+When someone later copies this tree to the staging host, the document root stays `public/`. Leave out `.git` and `.env`. `vendor/` can be uploaded, or installed on the server.
+
+1. `composer install --no-dev --optimize-autoloader`
+2. `cp env.example .env`, then set `CI_ENVIRONMENT = production` and `app.baseURL = 'https://staging.myfushi.com/'` (trailing slash).
+3. Make `writable/` writable by the PHP user.
+4. Confirm `public/robots.txt` allows crawlers (`Allow: /`) and lists `Sitemap: https://myfushi.com/sitemap.xml`.
+
+```bash
+rsync -av --exclude .git --exclude .env --exclude tests --exclude build \
+  ./ USER@HOST:~/staging.myfushi.com/
+```
+
+## Tool contract
+
+Forms POST back to the same path. The page echoes the input and shows 「結果＝参考・計算未實作」. There is no JSON API yet. Proposed shapes for a later API are in `docs/fe-api-contract-stub.md`. A GET with `submit=1` still hits the same controller.
 
 ## Content seed
 
-`app/Database/Seeds/data/content-seed-stub.csv` lists outline topics for 玄関 / 水回り / 引越. It is not imported and not rendered. Write page copy for the site itself. Do not paste outside video scripts, captions, or covers into the site.
+`app/Database/Seeds/data/content-seed-stub.csv` is the outline for 玄関 / 水回り / 引越. Cluster index pages read it. Only A7, B1, and C1 have sample articles. Those bodies are short originals written for the site. Do not paste outside video scripts, captions, or covers into the site.

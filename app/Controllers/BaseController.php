@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Libraries\PublicPages;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -45,5 +47,27 @@ abstract class BaseController extends Controller
 
         // Preload any models, libraries, etc, here.
         // $this->session = service('session');
+    }
+
+    /**
+     * Render a public page with the title, description, and canonical
+     * stored for that path. layouts/main.php prints them once.
+     *
+     * @param array<string, mixed> $data
+     */
+    protected function renderPage(string $view, string $path, array $data = []): string
+    {
+        $meta = (new PublicPages())->find($path);
+
+        if ($meta === null) {
+            throw new InvalidArgumentException('No public page metadata for path: ' . $path);
+        }
+
+        $data['title']       = $meta['title'];
+        $data['description'] = $meta['description'];
+        $data['canonical']   = PublicPages::absolute($meta['path']);
+        $data['robots']      = '';
+
+        return view($view, $data);
     }
 }
