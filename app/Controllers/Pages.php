@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Libraries\ContentCatalog;
+use App\Libraries\PublicPages;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Pages extends BaseController
@@ -16,16 +17,12 @@ class Pages extends BaseController
 
     public function disclaimer(): string
     {
-        return view('pages/disclaimer', [
-            'title' => '免責事項',
-        ]);
+        return $this->renderPage('pages/disclaimer', 'disclaimer');
     }
 
     public function privacy(): string
     {
-        return view('pages/privacy', [
-            'title' => 'プライバシー',
-        ]);
+        return $this->renderPage('pages/privacy', 'privacy');
     }
 
     public function cluster(string $key): ResponseInterface|string
@@ -36,8 +33,7 @@ class Pages extends BaseController
             return $this->notFound();
         }
 
-        return view('content/cluster', [
-            'title'   => $cluster['title'],
+        return $this->renderPage('content/cluster', $key, [
             'cluster' => $cluster,
         ]);
     }
@@ -50,8 +46,7 @@ class Pages extends BaseController
             return $this->notFound();
         }
 
-        return view('content/article', [
-            'title'   => $article['item']['title'],
+        return $this->renderPage('content/article', $cluster . '/' . strtolower($id), [
             'article' => $article,
         ]);
     }
@@ -60,8 +55,6 @@ class Pages extends BaseController
     {
         return $this->response
             ->setStatusCode(404)
-            ->setBody(view('errors/html/error_404_ja', [
-                'title' => 'ページが見つかりません',
-            ]));
+            ->setBody(view('errors/html/error_404_ja', PublicPages::notFoundData()));
     }
 }

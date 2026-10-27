@@ -1,10 +1,38 @@
+<?php
+$documentTitle = trim((string) ($title ?? ''));
+
+if ($documentTitle === '') {
+    $documentTitle = 'MyFushi';
+} elseif (! str_ends_with($documentTitle, 'MyFushi')) {
+    $documentTitle .= ' | MyFushi';
+}
+
+$metaDescription = trim((string) ($description ?? ''));
+$canonicalUrl    = trim((string) ($canonical ?? ''));
+$robotsContent   = trim((string) ($robots ?? ''));
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
-    <title><?= esc($title) ?> | MyFushi</title>
+    <title><?= esc($documentTitle) ?></title>
+<?php if ($metaDescription !== ''): ?>
+    <meta name="description" content="<?= esc($metaDescription) ?>">
+<?php endif; ?>
+<?php if ($canonicalUrl !== ''): ?>
+    <link rel="canonical" href="<?= esc($canonicalUrl) ?>">
+<?php endif; ?>
+<?php if ($robotsContent !== ''): ?>
+    <meta name="robots" content="<?= esc($robotsContent) ?>">
+<?php endif; ?>
+<?php if ($canonicalUrl !== ''): ?>
+    <meta property="og:title" content="<?= esc($documentTitle) ?>">
+<?php if ($metaDescription !== ''): ?>
+    <meta property="og:description" content="<?= esc($metaDescription) ?>">
+<?php endif; ?>
+    <meta property="og:url" content="<?= esc($canonicalUrl) ?>">
+<?php endif; ?>
     <link rel="preload" href="<?= base_url('fonts/shippori-mincho-500-japanese.woff2') ?>" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="<?= base_url('css/site.css') ?>">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3320427785368951" crossorigin="anonymous"></script>

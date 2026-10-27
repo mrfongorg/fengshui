@@ -24,8 +24,9 @@ final class PagesTest extends CIUnitTestCase
         $result->assertSee('tools/kichijitsu');
         $result->assertDontSee('住まいの整え方を、参考情報として届けるサイトです');
         $result->assertSee('lang="ja"');
-        $result->assertSee('noindex');
-        $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        $result->assertDontSee('noindex');
+        $result->assertDontSee('nofollow');
+        $this->assertSame('', $result->response()->getHeaderLine('X-Robots-Tag'));
     }
 
     public function testHomeShowsLiveAdUnitUnderHero(): void
@@ -84,7 +85,7 @@ final class PagesTest extends CIUnitTestCase
         $result->assertOK();
         $result->assertSee('本命星／今年吉方位');
         $result->assertSee('参考');
-        $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        $this->assertSame('', $result->response()->getHeaderLine('X-Robots-Tag'));
     }
 
     public function testHonmeiAcceptsYearWithoutCalculating(): void
@@ -147,7 +148,10 @@ final class PagesTest extends CIUnitTestCase
 
         $result->assertStatus(404);
         $result->assertSee('ページが見つかりません');
-        $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+        $body = (string) $result->response()->getBody();
+        $this->assertStringContainsString('<meta name="robots" content="noindex">', $body);
+        $this->assertStringNotContainsString('canonical', $body);
+        $this->assertSame('', $result->response()->getHeaderLine('X-Robots-Tag'));
     }
 
     public function testHonmeiPostEchoesInputWithoutCalculation(): void
@@ -238,7 +242,8 @@ final class PagesTest extends CIUnitTestCase
             $result->assertOK();
             $result->assertSee('MyFushi');
             $result->assertSee($needle);
-            $result->assertHeader('X-Robots-Tag', 'noindex, nofollow');
+            $result->assertDontSee('noindex');
+            $this->assertSame('', $result->response()->getHeaderLine('X-Robots-Tag'));
         }
     }
 

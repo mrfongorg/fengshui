@@ -20,7 +20,7 @@ class Tools extends BaseController
             ],
         ];
 
-        return $this->render('tools/honmei_kichihoi', '本命星／今年吉方位', $rules, $messages);
+        return $this->render('tools/honmei_kichihoi', 'tools/honmei-kichihoi', $rules, $messages);
     }
 
     public function kichijitsu(): string
@@ -49,7 +49,7 @@ class Tools extends BaseController
             ],
         ];
 
-        return $this->render('tools/kichijitsu', '吉日日暦', $rules, $messages);
+        return $this->render('tools/kichijitsu', 'tools/kichijitsu', $rules, $messages);
     }
 
     public function kimon(): string
@@ -70,7 +70,7 @@ class Tools extends BaseController
             'furniture' => $choiceMessages,
         ];
 
-        return $this->render('tools/kimon_qa', '鬼門問答', $rules, $messages);
+        return $this->render('tools/kimon_qa', 'tools/kimon-qa', $rules, $messages);
     }
 
     /**
@@ -81,7 +81,7 @@ class Tools extends BaseController
      * @param array<string, string>                $rules
      * @param array<string, array<string, string>> $messages
      */
-    private function render(string $view, string $title, array $rules, array $messages): string
+    private function render(string $view, string $path, array $rules, array $messages): string
     {
         $input     = $this->submittedInput();
         $submit    = $input['submit'] ?? null;
@@ -108,8 +108,7 @@ class Tools extends BaseController
             $values[$field] = is_string($raw) ? $raw : '';
         }
 
-        return view($view, [
-            'title'     => $title,
+        return $this->renderPage($view, $path, [
             'values'    => $values,
             'errors'    => $errors,
             'accepted'  => $accepted,
