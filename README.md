@@ -11,6 +11,7 @@ Branch `fe/myfushi-ci4-skeleton-20261022` is the frontend pass on `be/myfushi-ci
 | Path | Page |
 | --- | --- |
 | `/` | Home |
+| `/sitemap.xml` | Sitemap of the public pages |
 | `/disclaimer` | 免責事項 |
 | `/privacy` | プライバシー |
 | `/tools/honmei-kichihoi` | 本命星／今年吉方位（GET form, POST echo） |
@@ -51,7 +52,7 @@ For staging (`https://staging.myfushi.com`), when this project is deployed later
 
 This branch does not deploy. Production (`https://myfushi.com`) is out of scope.
 
-Stub responses send `X-Robots-Tag: noindex, nofollow`, a matching robots meta tag, and `public/robots.txt` disallows all crawlers. Remove those three before a public launch.
+Public pages are indexable. `public/robots.txt` allows crawlers and names `https://myfushi.com/sitemap.xml`. `app/Views/layouts/main.php` prints each page's title, meta description, canonical URL, and basic Open Graph tags from `App\Libraries\PublicPages`. Unknown URLs return 404 with a noindex robots meta tag. There is no JSON-LD yet.
 
 ## Staging copy (do not run as a production deploy)
 
@@ -60,7 +61,7 @@ When someone later copies this tree to the staging host, the document root stays
 1. `composer install --no-dev --optimize-autoloader`
 2. `cp env.example .env`, then set `CI_ENVIRONMENT = production` and `app.baseURL = 'https://staging.myfushi.com/'` (trailing slash).
 3. Make `writable/` writable by the PHP user.
-4. Confirm `public/robots.txt` still disallows all crawlers.
+4. Confirm `public/robots.txt` allows crawlers (`Allow: /`) and lists `Sitemap: https://myfushi.com/sitemap.xml`.
 
 ```bash
 rsync -av --exclude .git --exclude .env --exclude tests --exclude build \

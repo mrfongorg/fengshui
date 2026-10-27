@@ -4,6 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
+$routes->get('sitemap.xml', 'Sitemap::index');
 
 $routes->match(['GET', 'POST'], 'tools/honmei-kichihoi', 'Tools::honmei');
 $routes->match(['GET', 'POST'], 'tools/kichijitsu', 'Tools::kichijitsu');
@@ -24,5 +25,5 @@ foreach (['genkan', 'mizumawari', 'hikkoshi'] as $cluster) {
 $routes->set404Override(static function (?string $message = null) {
     helper('url');
 
-    return view('errors/html/error_404_ja', ['title' => 'ページが見つかりません']);
+    return view('errors/html/error_404_ja', \App\Libraries\PublicPages::notFoundData());
 });
